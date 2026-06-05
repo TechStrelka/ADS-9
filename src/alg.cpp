@@ -1,11 +1,13 @@
 // Copyright 2022 NNTU-CS
-#include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
-#include  "tree.h"
+#include <iostream>
+#include <fstream>
+#include <locale>
+#include <cstdlib>
+#include <vector>
+#include "tree.h"
 
-void collectPerms(Node* node, std::vector<char>& current, std::vector<std::vector<char>>& result) {
+void collectPerms(Node* node, std::vector<char>& current,
+                  std::vector<std::vector<char>>& result) {
     if (!node) return;
     if (node->value != '\0') current.push_back(node->value);
 
@@ -28,30 +30,30 @@ std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
 
 std::vector<char> getPerm1(const PMTree& tree, int num) {
     std::vector<std::vector<char>> perms = getAllPerms(tree);
-    if (num < 1 || num > (int)perms.size()) return {};
+    if (num < 1 || num > static_cast<int>(perms.size())) return {};
     return perms[num - 1];
 }
 
-long long fact(int n) {
-    long long res = 1;
+int64_t fact(int n) {
+    int64_t res = 1;
     for (int i = 2; i <= n; ++i) res *= i;
     return res;
 }
 
 std::vector<char> getPerm2(const PMTree& tree, int num) {
     int n = tree.getElementCount();
-    long long total = fact(n);
+    int64_t total = fact(n);
     if (num < 1 || num > total) return {};
 
     std::vector<char> result;
     Node* current = tree.getRoot();
-    long long idx = num - 1;
+    int64_t idx = num - 1;
 
     while (current && !current->children.empty()) {
         int branch_count = current->children.size();
-        long long combinations_per_branch = fact(branch_count - 1);
+        int64_t combinations_per_branch = fact(branch_count - 1);
 
-        long long child_idx = idx / combinations_per_branch;
+        int64_t child_idx = idx / combinations_per_branch;
         idx %= combinations_per_branch;
 
         current = current->children[child_idx];
@@ -59,4 +61,3 @@ std::vector<char> getPerm2(const PMTree& tree, int num) {
     }
     return result;
 }
-
