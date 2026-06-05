@@ -41,15 +41,8 @@ class PMTree {
         element_count = in.size();
         std::vector<char> sorted_in = in;
 
-        for (size_t i = 0; i < sorted_in.size(); ++i) {
-            for (size_t j = i + 1; j < sorted_in.size(); ++j) {
-                if (sorted_in[i] > sorted_in[j]) {
-                    char temp = sorted_in[i];
-                    sorted_in[i] = sorted_in[j];
-                    sorted_in[j] = temp;
-                }
-            }
-        }
+        std::sort(sorted_in.begin(), sorted_in.end());
+
         buildTree(root, sorted_in);
     }
 
