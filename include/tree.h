@@ -3,13 +3,14 @@
 #define INCLUDE_TREE_H_
 
 #include <vector>
+#include <algorithm>
 
 struct Node {
     char value;
     std::vector<Node*> children;
 
-    Node(char v) : value(v) {}
-    
+    explicit Node(char v) : value(v) {}
+
     ~Node() {
         for (Node* child : children) {
             delete child;
@@ -18,7 +19,7 @@ struct Node {
 };
 
 class PMTree {
-private:
+ private:
     Node* root;
     size_t element_count;
 
@@ -27,20 +28,19 @@ private:
         for (size_t i = 0; i < elements.size(); ++i) {
             Node* child = new Node(elements[i]);
             node->children.push_back(child);
-            
+
             std::vector<char> next_elements = elements;
             next_elements.erase(next_elements.begin() + i);
             buildTree(child, next_elements);
         }
     }
 
-public:
-    PMTree(const std::vector<char>& in) {
+ public:
+    explicit PMTree(const std::vector<char>& in) {
         root = new Node('\0');
         element_count = in.size();
         std::vector<char> sorted_in = in;
-        
-        // Сортировка без подключения сторонних библиотек
+
         for (size_t i = 0; i < sorted_in.size(); ++i) {
             for (size_t j = i + 1; j < sorted_in.size(); ++j) {
                 if (sorted_in[i] > sorted_in[j]) {
